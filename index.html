@@ -6,7 +6,7 @@
 <title>WP-2026-0103 :: 高级复核</title>
 <style>
 body{margin:0;padding:0;background:#0a0e14;color:#c9d1d9;font-family:'Courier New',monospace;display:flex;justify-content:center;align-items:center;min-height:100vh}
-.t{background:#12171f;width:95%;max-width:760px;padding:28px;border-radius:10px;border:1px solid #2d333b}
+.t{background:#12171f;width:95%;max-width:760px;padding:28px;border-radius:10px;border:1px solid #2d333b;position:relative;z-index:2}
 .h{color:#3fb950;border-bottom:1px solid #2d333b;padding-bottom:12px;margin-bottom:22px}
 .q{line-height:1.85;margin-bottom:26px}
 input{background:#0a0e14;border:1px solid #2d333b;color:#3fb950;padding:11px;width:100%;box-sizing:border-box;font-family:inherit;margin-top:10px}
@@ -15,59 +15,80 @@ button{background:#238636;color:#fff;border:none;padding:12px;margin-top:14px;cu
 .ok{color:#3fb950;text-align:center}
 .err{color:#f85149;font-size:.9em;margin-top:6px;display:none}
 .cb{background:#0a0e14;padding:16px;color:#d29922;margin:14px 0;border-left:3px solid #d29922;line-height:2}
+
+/* ===== 彩带飘落 ===== */
+.confetti{position:fixed;top:-10px;width:8px;height:14px;opacity:0;z-index:1;animation:fall linear infinite}
+@keyframes fall{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+
+/* ===== 礼花 ===== */
+.fw{position:fixed;width:6px;height:6px;border-radius:50%;z-index:1;animation:burst 1.4s ease-out infinite}
+@keyframes burst{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--x),var(--y)) scale(.2);opacity:0}}
+
+/* ===== 蛋糕 ===== */
+.cake-wrap{display:flex;justify-content:center;margin:24px 0}
+.cake{position:relative;width:150px;height:120px}
+.layer{position:absolute;left:50%;transform:translateX(-50%);border-radius:8px}
+.l1{bottom:0;width:150px;height:40px;background:#8b5a2b}
+.l2{bottom:38px;width:120px;height:35px;background:#d29922}
+.l3{bottom:71px;width:90px;height:30px;background:#f778ba}
+.frosting{position:absolute;bottom:99px;left:50%;transform:translateX(-50%);width:90px;height:12px;background:#fff;border-radius:6px}
+.candle{position:absolute;bottom:108px;width:6px;height:26px;background:#fff;border-radius:2px}
+.candle::before{content:'';position:absolute;top:-12px;left:50%;transform:translateX(-50%);width:8px;height:12px;background:#ffd700;border-radius:50% 50% 20% 20%;animation:flicker .4s infinite alternate}
+@keyframes flicker{0%{transform:translateX(-50%) scale(1);opacity:.9}100%{transform:translateX(-50%) scale(1.2);opacity:1}}
+.c1{left:35px}.c2{left:72px}.c3{left:109px}
 </style>
 </head>
 <body>
+
+<div id="fx"></div>
+
 <div class="t">
 <div class="h">&gt; AUDIT_WORKPAPER :: 高级逻辑复核</div>
 
 <div id="l1">
 <div class="q">
-<p><b>【Level 1 / 五元约束】</b></p>
-<p>甲、乙、丙、丁、戊五人，分别在 3、6、9、12、15 日，各执行一项不同的程序：<b>盘点存货、函证应收、检查凭证、监盘现金、复核底稿</b>。每人日期与程序均不重复。已知：</p>
-<div class="cb">
-① 甲在 3 日<br>
-② 执行"函证应收"的人在 12 日<br>
-③ 乙执行的不是函证应收，也不是盘点存货<br>
-④ 丙在 9 日，且不执行监盘现金<br>
-⑤ 丁执行的是复核底稿<br>
-⑥ 戊不在 15 日，也不执行检查凭证<br>
-⑦ 执行"监盘现金"的人在 6 日<br>
-⑧ 甲不执行检查凭证
-</div>
-<p>问：<b>谁在 12 日执行函证应收？</b></p>
-<input type="text" id="a1" placeholder="甲 / 乙 / 丙 / 丁 / 戊">
-<div class="err" id="e1">与约束矛盾。</div>
+<p><b>【Level 1 / 约瑟夫环】</b></p>
+<p>100 个人围成一圈，从 1 号开始循环报数。报到第 7 个人就当场淘汰，下一个人继续从 1 开始报数。</p>
+<p>问：<b>最后留下来的那一个人，最开始站在几号位置？</b></p>
+<input type="text" id="a1" placeholder="输入数字">
+<div class="err" id="e1">位置不对，重新推。</div>
 <button onclick="c1()">提交</button>
 </div>
 </div>
 
 <div id="l2" class="hd">
 <div class="q">
-<p><b>【Level 2 / 逆推归纳】</b></p>
-<p>5 人排成一列（第 1 人在最前，看不到任何人；第 5 人能看到前 4 人）。戴上 5 顶帽子，其中 <b>3 黑 2 白</b>，每人看不到自己的。从<b>第 5 人开始依次向前</b>报自己帽子颜色，所有人都绝顶聪明且能听到之前的回答。</p>
-<p>结果：第 5、4、3 人都说"不知道"，第 2 人却<b>准确报出了</b>自己的颜色。</p>
-<p>问：第 2 人的帽子是什么颜色？</p>
-<input type="text" id="a2" placeholder="黑 / 白">
-<div class="err" id="e2">归纳链有误。</div>
+<p><b>【Level 2 / 生日博弈】</b></p>
+<p>小明和小红都是学生，老师把自己的生日 M 月 N 日的 M 值告诉小明，N 值告诉小红，给出 10 个候选日期：</p>
+<div class="cb">
+3月4日、3月5日、3月8日<br>
+6月4日、6月7日<br>
+9月1日、9月5日<br>
+12月1日、12月2日、12月8日
+</div>
+<p>小明说："我不知道生日是哪天，但我肯定小红也不知道。"<br>
+小红说："我现在知道生日是哪天了。"<br>
+小明听完立刻说："我现在也知道了。"</p>
+<p>问：<b>老师的真正生日是哪一天？</b></p>
+<input type="text" id="a2" placeholder="如：9月1日">
+<div class="err" id="e2">对话链推不通。</div>
 <button onclick="c2()">提交</button>
 </div>
 </div>
 
 <div id="l3" class="hd">
 <div class="q">
-<p><b>【Level 3 / 证词矩阵】</b></p>
-<p>资金被挪用，A、B、C、D、E 中<b>只有一人作案</b>，且<b>作案人不是 D</b>。五人陈述如下，其中<b>恰好 3 人说真话、2 人说假话</b>：</p>
+<p><b>【Level 3 / 烧绳计量】</b></p>
+<p>你有足够多的绳子，每根不均匀的绳子单端点燃烧完刚好是 1 小时，绳子燃烧速度全段随机（粗细不均，不能用长度推算时间）。</p>
+<p>问：以下哪个时间长度是<b>无法精准计量</b>出来的？</p>
 <div class="cb">
-A：是 D 做的<br>
-B：不是我做的<br>
-C：是 A 做的<br>
-D：A 在说谎<br>
-E：不是我做的
+A. 45 分钟<br>
+B. 20 分钟<br>
+C. 7.5 分钟<br>
+D. 1 小时 45 分钟
 </div>
-<p>问：作案人是谁？</p>
-<input type="text" id="a3" placeholder="A / B / C / E">
-<div class="err" id="e3">真值分配不成立。</div>
+<input type="text" id="a3" placeholder="A / B / C / D">
+<div class="err" id="e3">计量方案不成立。</div>
 <button onclick="c3()">出具审计意见</button>
 </div>
 </div>
@@ -76,9 +97,23 @@ E：不是我做的
 <div class="ok">
 <h1>🔓 无保留意见</h1>
 <p>约束全部闭合，推理链完整，底稿通过高级复核。</p>
+
+<div class="cake-wrap">
+<div class="cake">
+<div class="layer l1"></div>
+<div class="layer l2"></div>
+<div class="layer l3"></div>
+<div class="frosting"></div>
+<div class="candle c1"></div>
+<div class="candle c2"></div>
+<div class="candle c3"></div>
+</div>
+</div>
+
 <hr style="border-color:#2d333b">
 <h2 style="color:#f778ba">🎂 1月3日，生日快乐</h2>
 <p>能把这种题推出来的人，<br>大概真的没有解不开的局。<br><br>新的一岁，愿你算得清账，<br>也过得尽兴。</p>
+<p style="font-size:1.6em;letter-spacing:8px">🎈 🎁 🎉 🎊 🥳</p>
 <button onclick="location.reload()">重新推理</button>
 </div>
 </div>
@@ -87,18 +122,46 @@ E：不是我做的
 <script>
 function c1(){
   var v=document.getElementById('a1').value.trim();
-  if(v==='戊'){document.getElementById('l1').classList.add('hd');document.getElementById('l2').classList.remove('hd');}
+  if(v==='49'){document.getElementById('l1').classList.add('hd');document.getElementById('l2').classList.remove('hd');}
   else{document.getElementById('e1').style.display='block';}
 }
 function c2(){
-  var v=document.getElementById('a2').value.trim();
-  if(v==='黑'){document.getElementById('l2').classList.add('hd');document.getElementById('l3').classList.remove('hd');}
+  var v=document.getElementById('a2').value.trim().replace(/\s/g,'');
+  if(v==='9月1日'||v==='09月01日'||v==='9月01日'){document.getElementById('l2').classList.add('hd');document.getElementById('l3').classList.remove('hd');}
   else{document.getElementById('e2').style.display='block';}
 }
 function c3(){
   var v=document.getElementById('a3').value.trim().toUpperCase();
-  if(v==='C'){document.getElementById('l3').classList.add('hd');document.getElementById('fin').classList.remove('hd');}
+  if(v==='B'){document.getElementById('l3').classList.add('hd');document.getElementById('fin').classList.remove('hd');fireworks();}
   else{document.getElementById('e3').style.display='block';}
+}
+
+/* 彩带：页面加载就飘 */
+var colors=['#f778ba','#3fb950','#d29922','#58a6ff','#f85149','#bc8cff'];
+var fx=document.getElementById('fx');
+for(var i=0;i<40;i++){
+  var c=document.createElement('div');
+  c.className='confetti';
+  c.style.left=Math.random()*100+'vw';
+  c.style.background=colors[i%colors.length];
+  c.style.animationDuration=(3+Math.random()*4)+'s';
+  c.style.animationDelay=(Math.random()*5)+'s';
+  fx.appendChild(c);
+}
+
+/* 礼花：通关时炸开 */
+function fireworks(){
+  for(var k=0;k<60;k++){
+    var p=document.createElement('div');
+    p.className='fw';
+    p.style.left='50%';
+    p.style.top='40%';
+    p.style.background=colors[k%colors.length];
+    p.style.setProperty('--x',(Math.random()*400-200)+'px');
+    p.style.setProperty('--y',(Math.random()*400-200)+'px');
+    p.style.animationDelay=(Math.random()*1.5)+'s';
+    fx.appendChild(p);
+  }
 }
 </script>
 </body>

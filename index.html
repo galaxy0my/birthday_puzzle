@@ -3,72 +3,71 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>审计底稿：异常事项追查</title>
+<title>WP-2026-0103 :: 高级复核</title>
 <style>
-body{margin:0;padding:0;background:#0d1117;color:#c9d1d9;font-family:'Courier New',monospace;display:flex;justify-content:center;align-items:center;min-height:100vh}
-.t{background:#161b22;width:94%;max-width:700px;padding:24px;border-radius:10px;border:1px solid #30363d}
-.h{color:#3fb950;border-bottom:1px solid #30363d;padding-bottom:12px;margin-bottom:20px}
-.q{line-height:1.7;margin-bottom:22px}
-input{background:#0d1117;border:1px solid #30363d;color:#3fb950;padding:10px;width:100%;box-sizing:border-box;font-family:inherit;margin-top:8px}
+body{margin:0;padding:0;background:#0a0e14;color:#c9d1d9;font-family:'Courier New',monospace;display:flex;justify-content:center;align-items:center;min-height:100vh}
+.t{background:#12171f;width:95%;max-width:760px;padding:28px;border-radius:10px;border:1px solid #2d333b}
+.h{color:#3fb950;border-bottom:1px solid #2d333b;padding-bottom:12px;margin-bottom:22px}
+.q{line-height:1.85;margin-bottom:26px}
+input{background:#0a0e14;border:1px solid #2d333b;color:#3fb950;padding:11px;width:100%;box-sizing:border-box;font-family:inherit;margin-top:10px}
 button{background:#238636;color:#fff;border:none;padding:12px;margin-top:14px;cursor:pointer;font-weight:bold;width:100%;border-radius:6px}
 .hd{display:none}
 .ok{color:#3fb950;text-align:center}
 .err{color:#f85149;font-size:.9em;margin-top:6px;display:none}
-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.88em}
-th,td{border:1px solid #30363d;padding:8px;text-align:left}
-th{background:#0d1117;color:#d29922}
-.cb{background:#0d1117;padding:14px;color:#d29922;margin:12px 0;border-left:3px solid #d29922;line-height:1.8}
+.cb{background:#0a0e14;padding:16px;color:#d29922;margin:14px 0;border-left:3px solid #d29922;line-height:2}
 </style>
 </head>
 <body>
 <div class="t">
-<div class="h">&gt; AUDIT_WORKPAPER :: 异常事项追查</div>
+<div class="h">&gt; AUDIT_WORKPAPER :: 高级逻辑复核</div>
 
 <div id="l1">
 <div class="q">
-<p><b>【Level 1 / 舞弊迹象识别】</b></p>
-<p>以下是某公司 12 月应收账款明细。其中<b>存在一笔典型的期末虚构收入</b>，请找出它的凭证号。</p>
-<table>
-<tr><th>凭证号</th><th>客户</th><th>日期</th><th>金额</th><th>期后回款</th></tr>
-<tr><td>#2031</td><td>恒信贸易</td><td>12-05</td><td>48,720</td><td>已回款</td></tr>
-<tr><td>#2038</td><td>明远科技</td><td>12-14</td><td>126,500</td><td>已回款</td></tr>
-<tr><td>#2042</td><td>嘉禾实业</td><td>12-19</td><td>33,180</td><td>已回款</td></tr>
-<tr><td>#2047</td><td>新宇商贸</td><td>12-31</td><td>500,000</td><td>无</td></tr>
-<tr><td>#2050</td><td>恒信贸易</td><td>12-28</td><td>76,440</td><td>已回款</td></tr>
-</table>
-<input type="text" id="a1" placeholder="输入凭证号，如 #0000">
-<div class="err" id="e1">该凭证未发现异常。</div>
+<p><b>【Level 1 / 五元约束】</b></p>
+<p>甲、乙、丙、丁、戊五人，分别在 3、6、9、12、15 日，各执行一项不同的程序：<b>盘点存货、函证应收、检查凭证、监盘现金、复核底稿</b>。每人日期与程序均不重复。已知：</p>
+<div class="cb">
+① 甲在 3 日<br>
+② 执行"函证应收"的人在 12 日<br>
+③ 乙执行的不是函证应收，也不是盘点存货<br>
+④ 丙在 9 日，且不执行监盘现金<br>
+⑤ 丁执行的是复核底稿<br>
+⑥ 戊不在 15 日，也不执行检查凭证<br>
+⑦ 执行"监盘现金"的人在 6 日<br>
+⑧ 甲不执行检查凭证
+</div>
+<p>问：<b>谁在 12 日执行函证应收？</b></p>
+<input type="text" id="a1" placeholder="甲 / 乙 / 丙 / 丁 / 戊">
+<div class="err" id="e1">与约束矛盾。</div>
 <button onclick="c1()">提交</button>
 </div>
 </div>
 
 <div id="l2" class="hd">
 <div class="q">
-<p><b>【Level 2 / 逻辑推断】</b></p>
-<p>出纳挪用资金，A、B、C、D 四人中<b>只有一人作案</b>，且<b>只有一人说真话</b>：</p>
-<div class="cb">
-A：是 B 做的<br>
-B：是 D 做的<br>
-C：不是我做的<br>
-D：B 在说谎
-</div>
-<p>请判断作案人是谁：</p>
-<input type="text" id="a2" placeholder="输入 A / B / C / D">
-<div class="err" id="e2">推理矛盾，重新验证。</div>
+<p><b>【Level 2 / 逆推归纳】</b></p>
+<p>5 人排成一列（第 1 人在最前，看不到任何人；第 5 人能看到前 4 人）。戴上 5 顶帽子，其中 <b>3 黑 2 白</b>，每人看不到自己的。从<b>第 5 人开始依次向后</b>报自己帽子颜色，所有人都绝顶聪明且能听到之前的回答。</p>
+<p>结果：第 5、4、3 人都说"不知道"，第 2 人却<b>准确报出了</b>自己的颜色。</p>
+<p>问：第 2 人的帽子是什么颜色？</p>
+<input type="text" id="a2" placeholder="黑 / 白">
+<div class="err" id="e2">归纳链有误。</div>
 <button onclick="c2()">提交</button>
 </div>
 </div>
 
 <div id="l3" class="hd">
 <div class="q">
-<p><b>【Level 3 / 试算平衡】</b></p>
-<p>期末试算平衡表如下，但贷方<b>漏记了一笔</b>，导致不平衡。请算出漏记金额：</p>
+<p><b>【Level 3 / 证词矩阵】</b></p>
+<p>资金被挪用，A、B、C、D、E 中<b>只有一人作案</b>，且<b>作案人不是 D</b>。五人陈述如下，其中<b>恰好 3 人说真话、2 人说假话</b>：</p>
 <div class="cb">
-借方合计：1,286,540<br>
-贷方合计：1,283,300
+A：是 D 做的<br>
+B：不是我做的<br>
+C：是 A 做的<br>
+D：A 在说谎<br>
+E：不是我做的
 </div>
-<input type="text" id="a3" placeholder="输入漏记的贷方金额">
-<div class="err" id="e3">试算仍不平衡。</div>
+<p>问：作案人是谁？</p>
+<input type="text" id="a3" placeholder="A / B / C / E">
+<div class="err" id="e3">真值分配不成立。</div>
 <button onclick="c3()">出具审计意见</button>
 </div>
 </div>
@@ -76,29 +75,29 @@ D：B 在说谎
 <div id="fin" class="hd">
 <div class="ok">
 <h1>🔓 无保留意见</h1>
-<p>三项异常均已查实，底稿通过复核。</p>
-<hr style="border-color:#30363d">
+<p>约束全部闭合，推理链完整，底稿通过高级复核。</p>
+<hr style="border-color:#2d333b">
 <h2 style="color:#f778ba">🎂 1月3日，生日快乐</h2>
-<p>连账都查得这么清楚的人，<br>生活里大概也没什么能瞒过你。<br><br>新的一岁，愿你查出的都是惊喜，<br>遇到的都是好人。</p>
-<button onclick="location.reload()">重新审计</button>
+<p>能把这种题推出来的人，<br>大概真的没有解不开的局。<br><br>新的一岁，愿你算得清账，<br>也过得尽兴。</p>
+<button onclick="location.reload()">重新推理</button>
 </div>
 </div>
 </div>
 
 <script>
 function c1(){
-  var v=document.getElementById('a1').value.trim().toUpperCase().replace(/\s/g,'');
-  if(v==='#2047'||v==='2047'){document.getElementById('l1').classList.add('hd');document.getElementById('l2').classList.remove('hd');}
+  var v=document.getElementById('a1').value.trim();
+  if(v==='戊'){document.getElementById('l1').classList.add('hd');document.getElementById('l2').classList.remove('hd');}
   else{document.getElementById('e1').style.display='block';}
 }
 function c2(){
-  var v=document.getElementById('a2').value.trim().toUpperCase();
-  if(v==='C'){document.getElementById('l2').classList.add('hd');document.getElementById('l3').classList.remove('hd');}
+  var v=document.getElementById('a2').value.trim();
+  if(v==='黑'){document.getElementById('l2').classList.add('hd');document.getElementById('l3').classList.remove('hd');}
   else{document.getElementById('e2').style.display='block';}
 }
 function c3(){
-  var v=document.getElementById('a3').value.trim().replace(/,/g,'');
-  if(v==='3240'){document.getElementById('l3').classList.add('hd');document.getElementById('fin').classList.remove('hd');}
+  var v=document.getElementById('a3').value.trim().toUpperCase();
+  if(v==='C'){document.getElementById('l3').classList.add('hd');document.getElementById('fin').classList.remove('hd');}
   else{document.getElementById('e3').style.display='block';}
 }
 </script>

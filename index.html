@@ -1,113 +1,106 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>生日密钥：解谜挑战</title>
-    <style>
-        body { margin: 0; padding: 0; background: #1e1e1e; color: #fff; font-family: 'Courier New', monospace; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
-        .terminal { background: #2d2d2d; width: 90%; max-width: 600px; padding: 20px; border-radius: 8px; box-shadow: 0 0 20px rgba(0,0,0,0.5); border-top: 10px solid #333; }
-        .header { color: #0f0; margin-bottom: 20px; font-size: 1.2em; border-bottom: 1px solid #444; padding-bottom: 10px; }
-        .question { margin-bottom: 20px; line-height: 1.6; }
-        input { background: #1e1e1e; border: 1px solid #555; color: #0f0; padding: 8px; width: 100%; box-sizing: border-box; font-family: inherit; margin-top: 5px; }
-        button { background: #0f0; color: #000; border: none; padding: 10px 20px; margin-top: 15px; cursor: pointer; font-weight: bold; width: 100%; }
-        button:hover { background: #0c0; }
-        .hidden { display: none; }
-        .success { color: #0f0; text-align: center; }
-        .error { color: #f00; font-size: 0.9em; margin-top: 5px; display: none; }
-        .code-block { background: #000; padding: 10px; color: #ff0; margin: 10px 0; font-size: 0.9em; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>审计底稿：异常事项追查</title>
+<style>
+body{margin:0;padding:0;background:#0d1117;color:#c9d1d9;font-family:'Courier New',monospace;display:flex;justify-content:center;align-items:center;min-height:100vh}
+.t{background:#161b22;width:94%;max-width:700px;padding:24px;border-radius:10px;border:1px solid #30363d}
+.h{color:#3fb950;border-bottom:1px solid #30363d;padding-bottom:12px;margin-bottom:20px}
+.q{line-height:1.7;margin-bottom:22px}
+input{background:#0d1117;border:1px solid #30363d;color:#3fb950;padding:10px;width:100%;box-sizing:border-box;font-family:inherit;margin-top:8px}
+button{background:#238636;color:#fff;border:none;padding:12px;margin-top:14px;cursor:pointer;font-weight:bold;width:100%;border-radius:6px}
+.hd{display:none}
+.ok{color:#3fb950;text-align:center}
+.err{color:#f85149;font-size:.9em;margin-top:6px;display:none}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.88em}
+th,td{border:1px solid #30363d;padding:8px;text-align:left}
+th{background:#0d1117;color:#d29922}
+.cb{background:#0d1117;padding:14px;color:#d29922;margin:12px 0;border-left:3px solid #d29922;line-height:1.8}
+</style>
 </head>
 <body>
+<div class="t">
+<div class="h">&gt; AUDIT_WORKPAPER :: 异常事项追查</div>
 
-    <div class="terminal" id="game-container">
-        <div class="header">> SYSTEM_ACCESS_REQUEST</div>
+<div id="l1">
+<div class="q">
+<p><b>【Level 1 / 舞弊迹象识别】</b></p>
+<p>以下是某公司 12 月应收账款明细。其中<b>存在一笔典型的期末虚构收入</b>，请找出它的凭证号。</p>
+<table>
+<tr><th>凭证号</th><th>客户</th><th>日期</th><th>金额</th><th>期后回款</th></tr>
+<tr><td>#2031</td><td>恒信贸易</td><td>12-05</td><td>48,720</td><td>已回款</td></tr>
+<tr><td>#2038</td><td>明远科技</td><td>12-14</td><td>126,500</td><td>已回款</td></tr>
+<tr><td>#2042</td><td>嘉禾实业</td><td>12-19</td><td>33,180</td><td>已回款</td></tr>
+<tr><td>#2047</td><td>新宇商贸</td><td>12-31</td><td>500,000</td><td>无</td></tr>
+<tr><td>#2050</td><td>恒信贸易</td><td>12-28</td><td>76,440</td><td>已回款</td></tr>
+</table>
+<input type="text" id="a1" placeholder="输入凭证号，如 #0000">
+<div class="err" id="e1">该凭证未发现异常。</div>
+<button onclick="c1()">提交</button>
+</div>
+</div>
 
-        <!-- 第一关：数学逻辑 -->
-        <div id="level1" class="level">
-            <div class="question">
-                <p>【Level 1: 逻辑校验】</p>
-                <p>系统检测到目标日期为1月3日。请计算：(1 * 3) + (1 + 3) 的结果是多少？</p>
-                <input type="number" id="ans1" placeholder="输入数字答案...">
-                <div class="error" id="err1">答案错误，请重新思考逻辑。</div>
-                <button onclick="checkLevel1()">提交验证</button>
-            </div>
-        </div>
+<div id="l2" class="hd">
+<div class="q">
+<p><b>【Level 2 / 逻辑推断】</b></p>
+<p>出纳挪用资金，A、B、C、D 四人中<b>只有一人作案</b>，且<b>只有一人说真话</b>：</p>
+<div class="cb">
+A：是 B 做的<br>
+B：是 D 做的<br>
+C：不是我做的<br>
+D：B 在说谎
+</div>
+<p>请判断作案人是谁：</p>
+<input type="text" id="a2" placeholder="输入 A / B / C / D">
+<div class="err" id="e2">推理矛盾，重新验证。</div>
+<button onclick="c2()">提交</button>
+</div>
+</div>
 
-        <!-- 第二关：代码填空 -->
-        <div id="level2" class="level hidden">
-            <div class="question">
-                <p>【Level 2: 代码修复】</p>
-                <p>这段代码原本是为了打印“Happy Birthday”，但缺了一个关键字。请补全：</p>
-                <div class="code-block">
-                    for i in range(1):<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;____("Happy Birthday")
-                </div>
-                <input type="text" id="ans2" placeholder="输入缺失的Python函数名...">
-                <div class="error" id="err2">语法错误，请检查拼写。</div>
-                <button onclick="checkLevel2()">运行代码</button>
-            </div>
-        </div>
+<div id="l3" class="hd">
+<div class="q">
+<p><b>【Level 3 / 试算平衡】</b></p>
+<p>期末试算平衡表如下，但贷方<b>漏记了一笔</b>，导致不平衡。请算出漏记金额：</p>
+<div class="cb">
+借方合计：1,286,540<br>
+贷方合计：1,283,300
+</div>
+<input type="text" id="a3" placeholder="输入漏记的贷方金额">
+<div class="err" id="e3">试算仍不平衡。</div>
+<button onclick="c3()">出具审计意见</button>
+</div>
+</div>
 
-        <!-- 第三关：视觉观察 -->
-        <div id="level3" class="level hidden">
-            <div class="question">
-                <p>【Level 3: 视觉解码】</p>
-                <p>在这串乱码中，隐藏着生日的月份数字，请找出它：<br>
-                <span style="color:#555">x8j2k9m1p4q7w3e6r5t0y2u8i9o1p</span></p>
-                <p>提示：它是这串字符中唯一出现的偶数质数。</p>
-                <input type="number" id="ans3" placeholder="输入数字...">
-                <div class="error" id="err3">解码失败。</div>
-                <button onclick="checkLevel3()">解锁最终密钥</button>
-            </div>
-        </div>
+<div id="fin" class="hd">
+<div class="ok">
+<h1>🔓 无保留意见</h1>
+<p>三项异常均已查实，底稿通过复核。</p>
+<hr style="border-color:#30363d">
+<h2 style="color:#f778ba">🎂 1月3日，生日快乐</h2>
+<p>连账都查得这么清楚的人，<br>生活里大概也没什么能瞒过你。<br><br>新的一岁，愿你查出的都是惊喜，<br>遇到的都是好人。</p>
+<button onclick="location.reload()">重新审计</button>
+</div>
+</div>
+</div>
 
-        <!-- 最终结果 -->
-        <div id="final" class="level hidden">
-            <div class="success">
-                <h1>🔓 ACCESS GRANTED</h1>
-                <p>密钥验证通过。</p>
-                <hr>
-                <h2 style="color:#ff6b81">🎂 1月3日生日快乐！</h2>
-                <p>亲爱的，愿你在新的一岁里，<br>代码无Bug，生活有惊喜。<br>无论遇到什么难题，都能像 刚才一样迎刃而解！</p>
-                <button onclick="location.reload()">重启系统</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // 第一关逻辑：(1*3) + (1+3) = 3 + 4 = 7
-        function checkLevel1() {
-            const val = document.getElementById('ans1').value;
-            if (val == 7) {
-                document.getElementById('level1').classList.add('hidden');
-                document.getElementById('level2').classList.remove('hidden');
-            } else {
-                document.getElementById('err1').style.display = 'block';
-            }
-        }
-
-        // 第二关逻辑：Python打印函数是 print
-        function checkLevel2() {
-            const val = document.getElementById('ans2').value.trim().toLowerCase();
-            if (val === 'print') {
-                document.getElementById('level2').classList.add('hidden');
-                document.getElementById('level3').classList.remove('hidden');
-            } else {
-                document.getElementById('err2').style.display = 'block';
-            }
-        }
-
-        // 第三关逻辑：偶数质数只有2
-        function checkLevel3() {
-            const val = document.getElementById('ans3').value;
-            if (val == 2) {
-                document.getElementById('level3').classList.add('hidden');
-                document.getElementById('final').classList.remove('hidden');
-            } else {
-                document.getElementById('err3').style.display = 'block';
-            }
-        }
-    </script>
+<script>
+function c1(){
+  var v=document.getElementById('a1').value.trim().toUpperCase().replace(/\s/g,'');
+  if(v==='#2047'||v==='2047'){document.getElementById('l1').classList.add('hd');document.getElementById('l2').classList.remove('hd');}
+  else{document.getElementById('e1').style.display='block';}
+}
+function c2(){
+  var v=document.getElementById('a2').value.trim().toUpperCase();
+  if(v==='C'){document.getElementById('l2').classList.add('hd');document.getElementById('l3').classList.remove('hd');}
+  else{document.getElementById('e2').style.display='block';}
+}
+function c3(){
+  var v=document.getElementById('a3').value.trim().replace(/,/g,'');
+  if(v==='3240'){document.getElementById('l3').classList.add('hd');document.getElementById('fin').classList.remove('hd');}
+  else{document.getElementById('e3').style.display='block';}
+}
+</script>
 </body>
 </html>

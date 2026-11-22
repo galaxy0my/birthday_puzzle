@@ -2,206 +2,296 @@
 <html lang="zh">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>WP-2026-0103 :: 高级复核</title>
 <style>
-  body{margin:0;padding:0;background:#0a0e14;color:#c9d1d9;font-family:'Courier New',monospace;display:flex;justify-content:center;align-items:center;min-height:100vh}
-  .t{background:#12171f;width:95%;max-width:760px;padding:28px;border-radius:10px;border:1px solid #2d333b;position:relative;z-index:2;box-shadow: 0 0 30px rgba(0,0,0,0.6)}
-  .h{color:#3fb950;border-bottom:1px solid #2d333b;padding-bottom:12px;margin-bottom:22px;font-size: 1.2em;}
-  .q{line-height:1.85;margin-bottom:26px}
-  input{background:#0a0e14;border:1px solid #2d333b;color:#3fb950;padding:11px;width:100%;box-sizing:border-box;font-family:inherit;margin-top:10px;border-radius:4px}
-  input:focus{outline:none;border-color:#3fb950}
-  button{background:#238636;color:#fff;border:none;padding:12px;margin-top:14px;cursor:pointer;font-weight:bold;width:100%;border-radius:6px;font-family:inherit;font-size:1em}
-  button:hover{background:#2ea043}
-  .hd{display:none}
-  .ok{color:#3fb950;text-align:center}
-  .err{color:#f85149;font-size:.9em;margin-top:6px;display:none}
-  .cb{background:#0a0e14;padding:16px;color:#d29922;margin:14px 0;border-left:3px solid #d29922;line-height:2;border-radius:4px}
-  
-  /* ===== 动态彩带 ===== */
-  .confetti{position:fixed;top:-10px;width:8px;height:14px;opacity:0;z-index:1;animation:fall linear infinite}
-  @keyframes fall{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{
+  margin:0;padding:24px 0;
+  background:#070a10;color:#c9d1d9;
+  font-family:'Courier New',ui-monospace,monospace;
+  min-height:100vh;width:100%;overflow-x:hidden;position:relative;
+}
 
-  /* ===== 礼花粒子 ===== */
-  .fw{position:fixed;width:4px;height:4px;border-radius:50%;z-index:1;pointer-events:none;animation:burst 1.5s ease-out forwards}
-  @keyframes burst{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--x),var(--y)) scale(0);opacity:0}}
+/* ===== 背景 ===== */
+.bg{position:fixed;inset:0;z-index:0;overflow:hidden;
+  background:radial-gradient(ellipse at 50% 0%,#131a2a 0%,#070a10 60%)}
+.orb{position:absolute;border-radius:50%;filter:blur(70px);opacity:.35;animation:drift 18s ease-in-out infinite}
+.orb.a{width:340px;height:340px;background:#58a6ff;top:-80px;left:-60px}
+.orb.b{width:300px;height:300px;background:#f778ba;bottom:-60px;right:-50px;animation-delay:-6s}
+.orb.c{width:260px;height:260px;background:#d29922;top:40%;left:55%;animation-delay:-12s;opacity:.2}
+@keyframes drift{
+  0%,100%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(40px,-30px) scale(1.15)}
+  66%{transform:translate(-30px,25px) scale(.9)}
+}
+.star{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;animation:twinkle 3s ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:.15}50%{opacity:.8}}
+#sky{position:fixed;inset:0;z-index:1;pointer-events:none}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:2;overflow:hidden}
 
-  /* ===== 史诗级通关界面 ===== */
-  .final-card{animation: slideUp 0.6s cubic-bezier(0.18, 0.89, 0.32, 1.28);}
-  @keyframes slideUp{0%{opacity:0;transform:translateY(20px)}100%{opacity:1;transform:translateY(0)}}
+/* ===== 卡片 ===== */
+.t{
+  position:relative;z-index:3;width:92%;max-width:720px;margin:0 auto;
+  padding:26px 22px;border-radius:18px;
+  background:rgba(18,23,31,.72);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:0 20px 60px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.06);
+}
+.h{color:#3fb950;border-bottom:1px solid rgba(255,255,255,.08);
+  padding-bottom:12px;margin-bottom:22px;font-size:1.15em;letter-spacing:.5px}
+.hd{display:none}
 
-  .cake-emoji{font-size:6rem;display:inline-block;margin:10px 0;animation: float 3s ease-in-out infinite;text-shadow: 0 0 20px rgba(255, 215, 0, 0.4)}
-  @keyframes float{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-15px) rotate(3deg)}}
+/* ===== 答题样式 ===== */
+.q{line-height:1.85;margin-bottom:20px}
+.q b{color:#e6edf3}
+input{background:rgba(10,14,20,.8);border:1px solid rgba(255,255,255,.12);
+  color:#3fb950;padding:12px;width:100%;font-family:inherit;
+  margin-top:10px;border-radius:8px;font-size:16px}
+input:focus{outline:none;border-color:#3fb950;box-shadow:0 0 0 3px rgba(63,185,80,.15)}
+button{background:linear-gradient(135deg,#238636,#2ea043);color:#fff;border:none;
+  padding:13px;margin-top:14px;cursor:pointer;font-weight:bold;width:100%;
+  border-radius:10px;font-family:inherit;font-size:1em;letter-spacing:1px;
+  transition:transform .15s,box-shadow .15s}
+button:active{transform:scale(.98)}
+button:hover{box-shadow:0 6px 20px rgba(46,160,67,.35)}
+.cb{background:rgba(10,14,20,.7);padding:16px;color:#d29922;margin:14px 0;
+  border-left:3px solid #d29922;line-height:2;border-radius:6px}
+.err{color:#f85149;font-size:.88em;margin-top:6px;display:none}
+.lv-tag{display:inline-block;padding:2px 10px;border-radius:12px;font-size:.72em;
+  background:rgba(88,166,255,.15);color:#58a6ff;margin-bottom:10px;letter-spacing:1px}
 
-  .title-fancy{font-size:1.6em;color:#58a6ff;letter-spacing:2px;margin-bottom:15px}
-  .glow-text{color:#d29922;font-size:1.8em;margin:15px 0;text-shadow:0 0 10px rgba(210,153,34,0.5);animation: pulse 2s infinite}
-  @keyframes pulse{0%,100%{text-shadow:0 0 10px rgba(210,153,34,0.5)}50%{text-shadow:0 0 25px rgba(210,153,34,0.8),0 0 10px rgba(210,153,34,0.3)}}
+/* ===== 彩带 ===== */
+.confetti{position:absolute;top:-20px;width:9px;height:15px;opacity:0;animation:fall linear infinite}
+@keyframes fall{
+  0%{transform:translateY(0) rotateX(0) rotateZ(0);opacity:1}
+  100%{transform:translateY(105vh) rotateX(720deg) rotateZ(360deg);opacity:.9}
+}
 
-  .emoji-row{font-size:1.6em;letter-spacing:12px;margin-top:15px;animation: zoom 1s infinite alternate}
-  @keyframes zoom{0%{transform:scale(0.9)}100%{transform:scale(1.05)}}
+/* ============================================
+   祝福四段式
+   ============================================ */
+.fin-wrap{position:relative}
+.scene{position:relative;min-height:70vh}
+.hd{display:none}
+
+/* 第1段：爱心卡片 */
+#heart-box{position:relative;width:100%;height:340px}
+.hcard{
+  position:absolute;width:46px;height:32px;border-radius:5px;
+  box-shadow:0 2px 8px rgba(0,0,0,.25);transform-origin:center;
+  animation:flyIn .9s cubic-bezier(.2,.8,.3,1) both;
+}
+@keyframes flyIn{
+  0%{transform:translate(var(--fx),var(--fy)) rotate(180deg) scale(.3);opacity:0}
+  100%{transform:translate(0,0) rotate(0) scale(1);opacity:.92}
+}
+
+/* 第2段：弹幕 */
+#danmaku-box{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.dm-card{
+  position:absolute;padding:8px 14px;border-radius:8px;
+  font-size:.82em;color:#5a4a52;white-space:nowrap;
+  box-shadow:0 3px 10px rgba(0,0,0,.18);animation:dmIn .7s ease both;
+}
+.dm-heart{color:#e0526d;margin-right:5px}
+@keyframes dmIn{0%{opacity:0;transform:scale(.4)}100%{opacity:.85;transform:scale(1)}}
+
+/* 中央卡片 */
+.center-card{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(.85);
+  width:min(88%,420px);padding:34px 26px;border-radius:16px;text-align:center;
+  background:rgba(255,255,255,.94);color:#4a3a42;
+  box-shadow:0 18px 50px rgba(0,0,0,.35);
+  opacity:0;pointer-events:none;transition:all .7s cubic-bezier(.2,.9,.3,1.2);z-index:5;
+}
+.center-card.show{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto}
+.center-card h1{margin:0 0 12px;font-size:2em;color:#c9455f;letter-spacing:2px}
+.center-card .heart-ico{color:#e0526d;animation:beat 1.2s ease-in-out infinite;display:inline-block}
+@keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}
+.center-card p{margin:0 0 22px;color:#8a7a82;font-size:.95em}
+#btn-galaxy{background:linear-gradient(135deg,#f2789f,#e0526d);width:auto;
+  padding:11px 26px;border-radius:24px;margin:0}
+
+/* 第3段：星河 */
+#scene-galaxy{
+  position:relative;min-height:82vh;border-radius:16px;overflow:hidden;
+  background:linear-gradient(160deg,#0d1330 0%,#1a1440 45%,#2a1a4a 100%);
+}
+#scene-galaxy.galaxy-in{animation:galIn 1.2s ease both}
+@keyframes galIn{0%{opacity:0;transform:scale(1.06)}100%{opacity:1;transform:none}}
+#galaxy-cv{position:absolute;inset:0;width:100%;height:100%}
+.galaxy-text{position:absolute;left:6%;top:8%;z-index:3;max-width:60%}
+.galaxy-text .en{font-size:.68em;letter-spacing:3px;color:#c9a86a;margin-bottom:10px}
+.galaxy-text h1{margin:0 0 10px;font-size:2.2em;color:#fff;letter-spacing:4px;
+  text-shadow:0 0 24px rgba(255,255,255,.35)}
+.galaxy-text p{margin:0 0 24px;color:#b8c0d8;font-size:.88em}
+.galaxy-text h2{margin:0 0 20px;font-size:1.4em;letter-spacing:2px;
+  background:linear-gradient(90deg,#ffd166,#f778ba);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+#btn-letter{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.3);
+  width:auto;padding:9px 22px;border-radius:20px;margin:0;font-size:.85em}
+
+/* 蛋糕 + 光环 */
+.cake-stage{position:absolute;right:6%;bottom:16%;z-index:3;text-align:center}
+.cake{position:relative;width:170px;margin:0 auto;animation:bob 4s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.candle{width:6px;height:34px;margin:0 auto;
+  background:linear-gradient(#fff,#e8e0f0);border-radius:3px;position:relative}
+.flame2{position:absolute;left:50%;top:-16px;transform:translateX(-50%);
+  width:12px;height:20px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;
+  background:radial-gradient(circle at 50% 72%,#fff8d0,#ffb347 55%,#ff6b35);
+  box-shadow:0 0 26px 8px rgba(255,190,90,.65);
+  animation:flick .16s ease-in-out infinite alternate}
+@keyframes flick{0%{transform:translateX(-50%) scale(1) rotate(-5deg)}
+  100%{transform:translateX(-50%) scale(1.15) rotate(5deg)}}
+.tier{margin:0 auto;border-radius:8px;position:relative;
+  background:
+    radial-gradient(circle at 25% 30%,rgba(255,255,255,.5) 0 1px,transparent 2px),
+    radial-gradient(circle at 70% 60%,rgba(255,255,255,.4) 0 1px,transparent 2px),
+    radial-gradient(circle at 45% 80%,rgba(255,255,255,.35) 0 1px,transparent 2px),
+    linear-gradient(160deg,#2a3a8f,#1a2460 60%,#3a2a7a);
+  background-size:22px 22px,26px 26px,18px 18px,100% 100%;
+  box-shadow:inset 0 -8px 16px rgba(0,0,0,.4),0 0 20px rgba(90,120,255,.25)}
+.t1{width:78px;height:34px}
+.t2{width:112px;height:40px}
+.t3{width:150px;height:46px}
+.dish{width:180px;height:12px;margin:4px auto 0;border-radius:50%;
+  background:linear-gradient(#e8e0f0,#b8b0c8);box-shadow:0 10px 26px rgba(0,0,0,.5)}
+.ring{position:absolute;left:50%;top:52%;border:2px solid rgba(255,220,150,.55);
+  border-radius:50%;transform:translate(-50%,-50%) rotateX(72deg);
+  box-shadow:0 0 18px rgba(255,200,120,.5);animation:spin 9s linear infinite}
+.ring.r1{width:230px;height:230px}
+.ring.r2{width:290px;height:290px;animation-duration:14s;animation-direction:reverse;
+  border-color:rgba(180,200,255,.4)}
+@keyframes spin{0%{transform:translate(-50%,-50%) rotateX(72deg) rotateZ(0)}
+  100%{transform:translate(-50%,-50%) rotateX(72deg) rotateZ(360deg)}}
+.happy{margin-top:18px;font-family:'Brush Script MT',cursive;font-size:2em;color:#fff;
+  text-shadow:0 0 18px rgba(255,255,255,.5);letter-spacing:1px}
+.blow{color:#a8b0c8;font-size:.78em;margin-top:4px}
+
+/* 特效切换按钮 */
+.fx-bar{position:absolute;left:0;right:0;bottom:4%;z-index:4;
+  display:flex;justify-content:center;gap:10px;flex-wrap:wrap;padding:0 12px}
+.fx-btn{width:auto;margin:0;padding:8px 18px;border-radius:20px;font-size:.8em;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);
+  font-weight:normal;letter-spacing:1px;backdrop-filter:blur(6px)}
+.fx-btn.on{background:rgba(255,209,102,.22);border-color:rgba(255,209,102,.6);color:#ffd166}
+
+/* 第4段：信件 */
+.letter-mask{position:fixed;inset:0;z-index:50;display:flex;align-items:center;
+  justify-content:center;background:rgba(5,8,16,.72);backdrop-filter:blur(6px);animation:fade .4s ease}
+@keyframes fade{0%{opacity:0}100%{opacity:1}}
+.letter{position:relative;width:min(90%,460px);max-height:78vh;overflow-y:auto;
+  padding:30px 28px;border-radius:14px;
+  background:linear-gradient(160deg,#1a2035,#141828);
+  border:1px solid rgba(255,255,255,.12);box-shadow:0 24px 70px rgba(0,0,0,.7);
+  animation:letterIn .5s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes letterIn{0%{opacity:0;transform:translateY(24px) scale(.94)}100%{opacity:1;transform:none}}
+.letter .close{position:absolute;right:14px;top:12px;width:30px;height:30px;margin:0;
+  padding:0;background:transparent;border:none;color:#8b949e;font-size:1.5em;line-height:1}
+.letter h3{margin:0 0 18px;color:#e6edf3;font-size:1.1em}
+.letter p{margin:0 0 14px;line-height:1.95;color:#c9d1d9;font-size:.94em;text-indent:2em}
+.letter .sign{margin-top:24px;text-align:right;color:#8b949e;font-size:.9em}
+
+@media (max-width:560px){
+  .galaxy-text{max-width:100%;left:5%;top:5%}
+  .galaxy-text h1{font-size:1.7em}
+  .cake-stage{right:50%;transform:translateX(50%);bottom:14%}
+  .ring.r1{width:180px;height:180px}
+  .ring.r2{width:230px;height:230px}
+}
 </style>
 </head>
 <body>
 
-<!-- 动态效果容器 -->
+<div class="bg">
+  <div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
+  <div id="stars"></div>
+</div>
+<canvas id="sky"></canvas>
 <div id="fx"></div>
 
 <div class="t">
   <div class="h">&gt; AUDIT_WORKPAPER :: 高级逻辑复核</div>
-
-  <!-- Level 1 -->
-  <div id="l1">
-    <div class="q">
-      <p><b>【Level 1 / 约瑟夫环】</b></p>
-      <p>100 个人围成一圈，从 1 号开始循环报数。报到第 7 个人就当场淘汰，下一个人继续从 1 开始报数。</p>
-      <p>问：<b>最后留下来的那一个人，最开始站在几号位置？</b></p>
-      <input type="text" id="a1" placeholder="输入数字">
-      <div class="err" id="e1">位置不对，重新推。</div>
-      <button onclick="c1()">提交</button>
-    </div>
-  </div>
-
-  <!-- Level 2 -->
-  <div id="l2" class="hd">
-    <div class="q">
-      <p><b>【Level 2 / 生日博弈】</b></p>
-      <p>小明和小红都是学生，老师把自己的生日 M 月 N 日的 M 值告诉小明，N 值告诉小红，给出 10 个候选日期：</p>
-      <div class="cb">
-        3月4日、3月5日、3月8日<br>
-        6月4日、6月7日<br>
-        9月1日、9月5日<br>
-        12月1日、12月2日、12月8日
-      </div>
-      <p>小明说："我不知道生日是哪天，但我肯定小红也不知道。"<br>
-      小红说："我现在知道生日是哪天了。"<br>
-      小明听完立刻说："我现在也知道了。"</p>
-      <p>问：<b>老师的真正生日是哪一天？</b></p>
-      <input type="text" id="a2" placeholder="如：9月1日">
-      <div class="err" id="e2">对话链推不通。</div>
-      <button onclick="c2()">提交</button>
-    </div>
-  </div>
-
-  <!-- Level 3 -->
-  <div id="l3" class="hd">
-    <div class="q">
-      <p><b>【Level 3 / 烧绳计量】</b></p>
-      <p>你有足够多的绳子，每根不均匀的绳子单端点燃烧完刚好是 1 小时，绳子燃烧速度全段随机。</p>
-      <p>问：以下哪个时间长度是<b>无法精准计量</b>出来的？</p>
-      <div class="cb">
-        A. 45 分钟<br>
-        B. 20 分钟<br>
-        C. 7.5 分钟<br>
-        D. 1 小时 45 分钟
-      </div>
-      <input type="text" id="a3" placeholder="A / B / C / D">
-      <div class="err" id="e3">计量方案不成立。</div>
-      <button onclick="c3()">出具审计意见</button>
-    </div>
-  </div>
-
-  <!-- 最终通关界面 (史诗级加强版) -->
-  <div id="fin" class="hd">
-    <div class="ok final-card">
-      <div class="title-fancy">🔓 无保留意见</div>
-      <p>约束全部闭合，推理链完整，底稿通过高级复核。</p>
-
-      <!-- 高清悬浮蛋糕 -->
-      <div class="cake-emoji">🎂</div>
-
-      <hr style="border-color:#2d333b;margin: 25px 0;">
-      
-      <!-- 动态发光生日祝福 -->
-      <div class="glow-text">🎂 1月3日，生日快乐 🎂</div>
-      
-      <p style="line-height:2;margin:20px 0">
-        能把这种题推出来的人，<br>
-        大概真的没有解不开的局。<br><br>
-        <span style="color:#58a6ff">新的一岁，愿你算得清账，也过得尽兴。</span>
-      </p>
-
-      <div class="emoji-row">🎈 🎁 🎉 🎊 🥳</div>
-
-      <button onclick="location.reload()" style="margin-top:30px;background:#1f6feb">重新推理</button>
-    </div>
-  </div>
-
+  <div id="stage"></div>
 </div>
 
+<script src="puzzle.js"></script>
+<script src="finale.js"></script>
 <script>
-  // 验证函数
-  function c1(){
-    var v=document.getElementById('a1').value.trim();
-    if(v==='49'){document.getElementById('l1').classList.add('hd');document.getElementById('l2').classList.remove('hd');}
-    else{document.getElementById('e1').style.display='block';}
+/* ===== 背景星点 ===== */
+(function(){
+  var s=document.getElementById('stars');
+  for(var i=0;i<70;i++){
+    var d=document.createElement('div');
+    d.className='star';
+    d.style.left=Math.random()*100+'%';
+    d.style.top=Math.random()*100+'%';
+    d.style.animationDelay=Math.random()*3+'s';
+    d.style.opacity=Math.random()*.5+.1;
+    s.appendChild(d);
   }
-  function c2(){
-    var v=document.getElementById('a2').value.trim().replace(/\s/g,'');
-    if(v==='9月1日'||v==='09月01日'||v==='9月01日'){document.getElementById('l2').classList.add('hd');document.getElementById('l3').classList.remove('hd');}
-    else{document.getElementById('e2').style.display='block';}
-  }
-  function c3(){
-    var v=document.getElementById('a3').value.trim().toUpperCase();
-    if(v==='B'){
-      document.getElementById('l3').classList.add('hd');
-      document.getElementById('fin').classList.remove('hd');
-      fireExplosion(); // 触发大爆炸特效
-    } else {
-      document.getElementById('e3').style.display='block';
-    }
-  }
+})();
 
-  /* ===== 背景动态彩带 ===== */
-  var colors=['#f778ba','#3fb950','#d29922','#58a6ff','#f85149','#bc8cff'];
+/* ===== 烟花引擎 ===== */
+var Fireworks=(function(){
+  var cv=document.getElementById('sky'),ctx=cv.getContext('2d');
+  var P=[],running=false;
+  var COLORS=['#ff6b9d','#ffd166','#06d6a0','#58a6ff','#bc8cff','#ff9e64','#f85149'];
+  function resize(){cv.width=innerWidth;cv.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  function loop(){
+    if(!running)return;
+    ctx.globalCompositeOperation='destination-out';
+    ctx.fillStyle='rgba(0,0,0,.18)';
+    ctx.fillRect(0,0,cv.width,cv.height);
+    ctx.globalCompositeOperation='lighter';
+    for(var i=P.length-1;i>=0;i--){
+      var p=P[i];
+      p.x+=p.vx;p.y+=p.vy;p.vy+=.045;p.vx*=.985;p.vy*=.985;p.life-=p.decay;
+      if(p.life<=0){P.splice(i,1);continue}
+      ctx.globalAlpha=p.life;ctx.fillStyle=p.col;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r*p.life,0,6.283);ctx.fill();
+    }
+    ctx.globalAlpha=1;
+    if(P.length)requestAnimationFrame(loop);
+    else{running=false;ctx.clearRect(0,0,cv.width,cv.height)}
+  }
+  return {
+    burst:function(x,y){
+      var n=70+Math.floor(Math.random()*40);
+      var col=COLORS[Math.floor(Math.random()*COLORS.length)];
+      for(var i=0;i<n;i++){
+        var a=Math.PI*2*i/n,sp=2+Math.random()*4.5;
+        P.push({x:x,y:y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,
+          life:1,decay:.012+Math.random()*.015,
+          col:Math.random()>.75?'#fff':col,r:1+Math.random()*1.8});
+      }
+      if(!running){running=true;loop()}
+    },
+    colors:COLORS
+  };
+})();
+
+/* ===== 彩带 ===== */
+function startConfetti(){
   var fx=document.getElementById('fx');
-  
-  // 生成背景飘落的彩带
-  for(var i=0;i<50;i++){
+  for(var i=0;i<70;i++){
     var c=document.createElement('div');
     c.className='confetti';
-    c.style.left=Math.random()*100+'vw';
-    c.style.background=colors[Math.floor(Math.random()*colors.length)];
-    c.style.animationDuration=(3+Math.random()*4)+'s';
-    c.style.animationDelay=(Math.random()*6)+'s';
-    c.style.borderRadius=Math.random()>0.5?'50%':'2px'; // 随机圆点或矩形
+    c.style.left=Math.random()*100+'%';
+    c.style.background=Fireworks.colors[Math.floor(Math.random()*Fireworks.colors.length)];
+    c.style.animationDuration=(3.5+Math.random()*4)+'s';
+    c.style.animationDelay=(Math.random()*7)+'s';
+    c.style.borderRadius=Math.random()>.5?'50%':'2px';
     fx.appendChild(c);
   }
+}
 
-  /* ===== 史诗级礼花爆炸特效 ===== */
-  function fireExplosion(){
-    var container = document.getElementById('fx');
-    // 在屏幕中心周围炸开 3 波礼花
-    for(var w=0; w<3; w++){
-      setTimeout(() => {
-        for(var k=0;k<80;k++){
-          var p=document.createElement('div');
-          p.className='fw';
-          
-          // 随机位置
-          var startX = (window.innerWidth / 2) + (Math.random() * 200 - 100);
-          var startY = (window.innerHeight / 2) + (Math.random() * 200 - 100);
-          
-          p.style.left=startX+'px';
-          p.style.top=startY+'px';
-          p.style.background=colors[Math.floor(Math.random()*colors.length)];
-          
-          // 随机爆炸半径
-          var radius = 150 + Math.random() * 250;
-          var angle = Math.random() * Math.PI * 2;
-          var dx = Math.cos(angle) * radius;
-          var dy = Math.sin(angle) * radius;
-          
-          p.style.setProperty('--x', dx + 'px');
-          p.style.setProperty('--y', dy + 'px');
-          
-          container.appendChild(p);
-          
-          // 1.5秒后移除元素
-          setTimeout(() => { p.remove() }, 1500);
-        }
-      }, w * 400);
-    }
-  }
+/* ===== 启动 ===== */
+document.addEventListener('DOMContentLoaded',function(){ renderPuzzle(1); });
 </script>
 </body>
 </html>

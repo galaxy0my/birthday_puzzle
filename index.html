@@ -221,6 +221,20 @@ button:hover{box-shadow:0 6px 20px rgba(46,160,67,.35)}
 <script src="puzzle.js"></script>
 <script src="finale.js"></script>
 <script>
+/* ===== 全局错误捕获：报错直接显示在屏幕上 ===== */
+window.onerror = function(msg, url, line){
+  var box = document.getElementById('errbox');
+  if(!box){
+    box = document.createElement('div');
+    box.id = 'errbox';
+    box.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:9999;'+
+      'background:#f85149;color:#fff;padding:10px 14px;font-size:12px;'+
+      'font-family:monospace;white-space:pre-wrap;max-height:40vh;overflow:auto';
+    document.body.appendChild(box);
+  }
+  box.textContent += '❌ ' + msg + ' (行' + line + ')\n';
+};
+
 /* ===== 背景星点 ===== */
 (function(){
   var s=document.getElementById('stars');
@@ -291,7 +305,13 @@ function startConfetti(){
 }
 
 /* ===== 启动 ===== */
-document.addEventListener('DOMContentLoaded',function(){ renderPuzzle(1); });
+document.addEventListener('DOMContentLoaded',function(){
+  if(typeof renderPuzzle === 'function'){
+    renderPuzzle(1);
+  }else{
+    window.onerror('puzzle.js 未加载成功');
+  }
+});
 </script>
 </body>
 </html>

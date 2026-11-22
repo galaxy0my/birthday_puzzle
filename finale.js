@@ -34,6 +34,8 @@ function showFinale(){
         '<p>希望你天天开心，永远幸福</p>'+
         '<h2>祝你生日快乐</h2>'+
         '<button id="btn-letter">给你的一封信</button>'+
+        '<button id="btn-letter2">再读一封</button>'+
+
       '</div>'+
       '<div class="cake-stage">'+
         '<div class="cake">'+
@@ -60,15 +62,30 @@ function showFinale(){
     '<div id="letter-mask" class="letter-mask hd">'+
       '<div class="letter">'+
         '<button class="close">×</button>'+
-        '<h3>致小寿星：</h3>'+
+        '<h3>致小寿星：</h3>'+ 
+        '<p>  时光清浅处，一岁一安然。</p>'+
+        '<p>  愿您新的一岁，既有烟火气的热饭暖茶，也有藏在日常里的小浪漫，日子过得有滋有味，喜乐无虞。</p>'+
+        '<p>  送你一份100%纯情奶糖:成分是真心+思念+快乐，有效期是一生；营养是温馨+幸福+感动。</p>'+
+        '<p>  愿你岁岁无忧，一生被爱，永远有敢于奔赴山海的勇气</p>'+
+        '<p>  让风捎去我轻轻的祝福，落在你耳边：新的一岁，愿你所遇皆良人，所行皆顺利，把过往的遗憾清零，把未来的期待装满，每一天都有细碎的小惊喜。</p>'+
+        
+        '<div class="sign">——你的好朋友xyj</div>'+
+      '</div>'+
+    '</div>'+
+         '<div id="letter-mask2" class="letter-mask hd">'+
+      '<div class="letter">'+
+        '<button class="close2">×</button>'+
+        '<h3>嘿嘿，没想到吧，还有一封：</h3>'+
         '<p>  生日快乐呀！新的一岁开始啦，先给你一个大大的拥抱。</p>'+
         '<p>  谢谢你出现在我的生活里。那些一起分享的开心和烦恼，都让平凡的日子变得闪闪发光。</p>'+
         '<p>  谢谢你一直以来的温柔和陪伴。不管遇到什么事，想到你就会觉得很安心。</p>'+
         '<p>  新的一岁，愿你所有的努力都有回报，所有的期待都能如愿，去喜欢的地方，见想见的人，做想做的事。</p>'+
         '<p>  最后，还是想把这句话认真地说给你听：小寿星，祝你天天开心，永远幸福。</p>'+
+      
         '<div class="sign">——你的好朋友xyj</div>'+
       '</div>'+
     '</div>'+
+
 
   '</div>';
 
@@ -334,4 +351,17 @@ function bindFinaleEvents(){
       Galaxy.setMode(this.getAttribute('data-fx'));
     };
   }
+   
+  // 第二封信
+  document.getElementById('btn-letter2').onclick = function(){
+    document.getElementById('letter-mask2').classList.remove('hd');
+  };
+  document.querySelector('#letter-mask2 .close2').onclick = function(){
+    document.getElementById('letter-mask2').classList.add('hd');
+  };
+  document.getElementById('letter-mask2').onclick = function(e){
+    if(e.target.id==='letter-mask2')
+      document.getElementById('letter-mask2').classList.add('hd');
+  };
+
 }

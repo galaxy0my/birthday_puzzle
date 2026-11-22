@@ -59,7 +59,11 @@ function renderPuzzle(level){
       if(level < PUZZLES.length){
         renderPuzzle(level+1);
       }else{
-        showFinale();          // 定义在 finale.js
+        if(typeof showFinale === 'function'){
+          showFinale();
+        }else{
+          window.onerror('showFinale 未定义 → finale.js 加载失败或有语法错误');
+        }
       }
     }else{
       document.getElementById('err').style.display='block';

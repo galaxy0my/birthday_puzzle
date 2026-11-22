@@ -38,7 +38,7 @@ function showFinale(){
       '<div class="cake-stage">'+
         '<div class="cake">'+
           '<div class="candle"><i class="flame2"></i></div>'+
-          '<div class="tier t1"></div>'+
+          '<div class="tier t1"><i class="cherry"></i></div>'+
           '<div class="tier t2"></div>'+
           '<div class="tier t3"></div>'+
           '<div class="dish"></div>'+

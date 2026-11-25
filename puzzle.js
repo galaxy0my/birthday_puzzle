@@ -23,7 +23,7 @@ var PUZZLES = [
     ph:'如：9月1日',
     check:function(v){
       var s=v.trim().replace(/\s/g,'');
-      return s==='9月1日'||s==='09月01日'||s==='9月01日';
+      return s==='9月1日'||s==='9月1号'||s==='9月01日'||s==='9.1'||s==='9.01';
     },
     err:'对话链推不通。',
     btn:'提交'
